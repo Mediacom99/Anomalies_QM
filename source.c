@@ -162,6 +162,104 @@ long double Kigx(long double x, long double g)
 		return result;
 }
 
+void bracketing(long double(*f)(long double, long double), long double x1, long double x2, 
+				int n, long double* xb1, long double* xb2, long double g)
+{	
+
+	int nroot = 0;
+	long double dx = (x2 - x1) / (long double)n;
+	long double x = x1;
+	long double fp = f(x1,g);
+	for (int i = 0; i < n; ++i)
+	{
+		long double fc = f(x+=dx,g);
+
+		//Se c'è il cambio di segno allora salva i valori
+		if(fc*fp <= 0.0)
+		{
+			xb1[nroot] = x-dx;
+			xb2[nroot] = x;
+			//printf("%d\n",nroot);
+			nroot++;
+		}
+		fp=fc;
+	}
+
+	return;
+
+}
+
+
+//Algoritmo che, partendo dagli intervalli usati da bracketing, ricava precisamente la radice
+//xacc = accuratezza entro cui cercare lo zero
+long double bisection(long double(*func)(long double, long double), long double x1, long double x2, long double xacc, long double g)
+{
+	const int JMAX = 100;
+	//const int JMAX = 100;
+	//maximum allowed number of bisections
+	long double dx,xmid,rtb;
+	long double f = func(x1,g);
+	long double fmid = func(x2,g);
+	if(func(x1,g)*func(x2,g) >= 0)
+	{
+		printf("FUNC(x1,G) = %.30LF\n", func(x1,g));
+		printf("FUNC(x2,G) = %.30LF\n", func(x2,g));
+		printf("Bracketing da rifare\n");
+		exit(EXIT_FAILURE);
+	}
+	if(f<0.0)
+	{
+		dx = x2-x1;
+		rtb = x1;
+	}else
+	{
+		dx = x1-x2;
+		rtb = x2;
+	}
+	for (int i = 0; i < JMAX; ++i)
+	{
+		fmid=func(xmid=rtb+(dx*=0.5),g);
+		//printf("fmid=%f rtb=%f\n",fmid,rtb);
+		if(fmid <= 0.0) rtb = xmid;
+		if(fabsl(dx)<xacc || fmid == 0.0) return rtb;
+	}
+	printf("Troppe iterazioni\n");
+	exit(EXIT_FAILURE);
+
+}
+
+long double max(long double* a, int dim)
+{	
+	long double temp = a[0];
+	for (int i = 0; i < dim; ++i)
+	{
+		if(temp < a[i] && !(temp != temp))
+		{
+			temp = a[i];
+			//printf("%.30LF\n",a[i]);
+		}
+	}
+	return temp;
+}
+
+void freeV(long double* a, int dim)
+{
+	for (int i = 0; i < dim; ++i)
+	{
+		a[i] = NAN;
+	}
+	return;
+}
+
+void printVec(long double* a, int dim)
+{
+	for (int i = 0; i < dim; ++i)
+	{
+		printf("%.30Lf\n",a[i]);
+	}
+	return;
+}
+
 
 int main(int argc, char const *argv[])
 {
@@ -172,15 +270,17 @@ int main(int argc, char const *argv[])
 	(usando metodo di laguerre)
 	*/
 
-
-	if(argc < 2)
-	{
-		printf("Utilizzo: nomefileOutput.txt\n");
-	}
-
+	
 	FILE* file;
-	file = fopen(argv[1],"w");
+	file = fopen("data.txt","w");
+	
 
+	FILE* file2;
+	file2 = fopen("zero.txt","w");
+
+	//Plot K_ig
+
+	
 	long double x = 1.0;
 	long double g = 3.0;
 	long double k = 0.043089;
@@ -194,8 +294,61 @@ int main(int argc, char const *argv[])
 		fprintf(file, "%.30LF,%.30LF\n",x,Kigx(k*x,g));
 		x+=h;
 	}
+	
+
+	/*
+	//TROVARE GLI ZERI DI K_ig 
+
+	//Numero di radici
+	int nroot = 10;
+	//guess iniziali intervallo in cui cercare gli intervalli che contengono radici
+	long double a = 0.0;
+	long double b = 8.0;
+	long double xb1[nroot];
+	long double xb2[nroot];
+	long double G = 1.0;
+	int N = 50;
+	long double h = (long double)(8-G) / (long double)N;
+	
+	for (int i = 0; i < N; ++i)
+	{
+		
+	bracketing(Kigx,a,b,1,xb1,xb2,G);
+	
+	//printf("%.30LF,%.30LF\n",xb1[0],xb2[0]);
+	
+	printf("%.30LF,%.30LF\n",G,bisection(Kigx,xb1[0],xb2[0],0.0001,G));
+	G+=h;
+
+	}
+	
+	
+	
+	long double pos1,pos2;
+	for (int j = 0; j < N; ++j)
+	{
+
+		bracketing(Kigx,a,b,100,xb1,xb2,G);
+		pos1 = max(xb1,nroot);
+		pos2 = max(xb2,nroot);
+		printf("MAX xb1 = %.30LF\n", pos1);
+		printf("MAX xb2 = %.30LF\n", pos2);
+		printf("\n\n\n");
+		fprintf(file2,"%.30LF,%.50LF\n",G,bisection(Kigx,pos1,pos2,0.00000001,G));
+		G+=h;
+		//printVec(xb1,nroot);
+		//printf("\n");
+		//printVec(xb2,nroot);
+		freeV(xb1, nroot);
+		freeV(xb2, nroot);
+
+	}
+	*/
 
 	fclose(file);
+	fclose(file2);
+	
+
 	
 	return 0;
 }
