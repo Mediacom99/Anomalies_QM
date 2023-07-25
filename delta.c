@@ -47,7 +47,7 @@ long double G(long double x, long double g)
 long double delta(long double x, long double g)
 {	
 	long double var = G(x,g) / F(x,g);
-	long double result = -atanl(var) - PI/4.0;
+	long double result = -atanl(var);// - PI/4.0;
 	//printf("A/B = %.30Lf, atanl = %.30Lf, G = %.30Lf, F = %.30Lf\n", var, atanl(var), G(x,g), F(x,g));
 	return result;
 }
@@ -102,29 +102,30 @@ int main(int argc, char const *argv[])
 	FILE* file = fopen("deltaDati.txt","w");
 	long double g = 0.5;
 	long double a,b;
-	a = powl(10,-50);
-	b = 1; //powl(10.0, 1);
+	a = 0.01;
+	b = 1.0; //powl(10.0, 1);
 	int N = 50000;
 	long double h = (b-a) / (long double)N;
 	printf("%.30Lf\n",h);
 	long double x = a;
 	
-	/*
+	
 	for (int i = 0; i < N; ++i)
 	{
 		fprintf(file, "%.50Lf,%.50Lf\n",x,delta(x,g));
 		x+=h;
 	}
-	*/
+	
 
 	//Tutti e 3 i modi sembrano essere uguali per x << 10^(-2,-3)
 	
+	/*
 	while(x < b)
 	{
-		fprintf(file, "%.50Lf,%.50Lf\n",x,delta(x,g));
+		fprintf(file, "%.70Lf,%.70Lf\n",x,delta(x,g));
 		x*=1.01;
 	}
-		
+	*/	
 	
 	/*
 	x = 0.00000928446791485507077246619472453079136009534977; //-1.34156105901010435710925955410388610289373900741339
