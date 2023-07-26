@@ -1,0 +1,7 @@
+figure.figsize : 4.9, 3.5
+font.size: 11.0
+font.family: serif
+axes.titlesize: large
+figure.titlesize: medium
+text.usetex: True
+text.latex.preamble: \usepackage{amsmath}\usepackage{amssymb}\usepackage{siunitx}
