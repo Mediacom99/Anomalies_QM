@@ -6,6 +6,7 @@
 
 const long double PI = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647;
 const long double PHI = -0.244058298905427762659753987235745798131278180478499954070; //DIPENDE DA G: arg(Gamma(1+ig))
+const long double gamma = 1.7810724179901979852365041031071795491696452143034302053576658765; //exp(cost eulero-masch)
 
 long double F1(long double t, long double x, long double g)
 {
@@ -47,7 +48,7 @@ long double G(long double x, long double g)
 long double delta(long double x, long double g)
 {	
 	long double var = G(x,g) / F(x,g);
-	long double result = -atanl(var);// - PI/4.0;
+	long double result = -atanl(var)- PI/4.0;
 	//printf("A/B = %.30Lf, atanl = %.30Lf, G = %.30Lf, F = %.30Lf\n", var, atanl(var), G(x,g), F(x,g));
 	return result;
 }
@@ -92,6 +93,12 @@ long double deltaG(long double x, long double g)
 }
 
 
+//plot delta(ke) con g = 0
+long double delta0(long double x)
+{
+	long double a = logl(gamma*x / 2.0);
+	return atanl((a + PI/2.0) / (a - PI/2.0));
+}
 
 
 
@@ -102,30 +109,32 @@ int main(int argc, char const *argv[])
 	FILE* file = fopen("deltaDati.txt","w");
 	long double g = 0.5;
 	long double a,b;
-	a = 0.01;
-	b = 1.0; //powl(10.0, 1);
+	a = powl(10.0,-70);
+	b = powl(10.0,-1); //powl(10.0, 1);
 	int N = 50000;
 	long double h = (b-a) / (long double)N;
 	printf("%.30Lf\n",h);
 	long double x = a;
 	
-	
+	/*
 	for (int i = 0; i < N; ++i)
 	{
 		fprintf(file, "%.50Lf,%.50Lf\n",x,delta(x,g));
 		x+=h;
 	}
+	*/
 	
 
 	//Tutti e 3 i modi sembrano essere uguali per x << 10^(-2,-3)
 	
-	/*
+	
 	while(x < b)
 	{
-		fprintf(file, "%.70Lf,%.70Lf\n",x,delta(x,g));
+		//fprintf(file, "%.70Lf,%.70Lf\n",x,delta(x,g));
+		fprintf(file, "%.70Lf,%.70Lf\n",x,delta0(x));
 		x*=1.01;
 	}
-	*/	
+		
 	
 	/*
 	x = 0.00000928446791485507077246619472453079136009534977; //-1.34156105901010435710925955410388610289373900741339

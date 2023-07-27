@@ -53,6 +53,7 @@ plt.vlines(x = 3, ymin = 0, ymax = 4,
 ax.set_xlabel(r'$g$', fontsize = 20, loc = "right")
 ax.set_ylabel(r'$k_{1}\epsilon$', fontsize = 20, loc = "top")
 ax.legend(["Numerical solution","Approximation","g = 3"])
-ax.set(xlim =(np.amin(x),np.amax(x)),ylim=(np.amin(f)*1.25,np.amax(f)*1.25))
+#ax.set(xlim =(np.amin(x),np.amax(x)),ylim=(np.amin(f)*1.25,np.amax(f)*1.25))
+ax.set(xlim =(np.amin(x),np.amax(x)),ylim=(-0.025, 0.025))
 #xlim=(np.amin(x),np.amax(x)+2)
 plt.show()

@@ -11,6 +11,10 @@
 
 // Plotting the modified bessel function of the second kind K with imaginary order by using 
 // one of the integral representations
+
+const long double PI = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148086513282306647;
+
+
 long double T(long double a, long double x)
 {
 	return (x+a);
@@ -174,12 +178,12 @@ void bracketing(long double(*f)(long double, long double), long double x1, long 
 	{
 		long double fc = f(x+=dx,g);
 
+		//printf("%.30Lf,%.30Lf, %.30Lf, %.30Lf\n",x-dx,x,fc,fp);
 		//Se c'è il cambio di segno allora salva i valori
 		if(fc*fp <= 0.0)
 		{
 			xb1[nroot] = x-dx;
 			xb2[nroot] = x;
-			//printf("%d\n",nroot);
 			nroot++;
 		}
 		fp=fc;
@@ -260,6 +264,14 @@ void printVec(long double* a, int dim)
 	return;
 }
 
+void iniV(long double* a, int dim)
+{
+	for (int i = 0; i < dim; ++i)
+	{
+		a[i] = 0.0;
+	}
+	return;
+}
 
 int main(int argc, char const *argv[])
 {
@@ -280,36 +292,43 @@ int main(int argc, char const *argv[])
 
 	//Plot K_ig
 
-	
-	long double x = 1.0;
-	long double g = 3.0;
+	/*
+	long double x;
+	long double a = 1.0;
+	long double b = 100.0;
+	long double g = 3;
 	long double k = 0.043089;
+	x = a;
+	//long double norm = k*sqrtl(2*sinhl(PI*g) / (PI*g));
 	//0.122830; 
 	//0.350972;
 	//1.024645;
-	long double N = 1000;
-	long double h = 100.0 / N;
+	long double N = 10000;
+	long double h =  (b-a)/ (long double)N;
 	for (int i = 0; i < N; ++i)
 	{
-		fprintf(file, "%.30LF,%.30LF\n",x,Kigx(k*x,g));
+		fprintf(file, "%.30LF,%.30LF\n",x,sqrtl(x)*Kigx(k*x,g));
 		x+=h;
 	}
 	
-
-	/*
+	*/
+	
 	//TROVARE GLI ZERI DI K_ig 
 
 	//Numero di radici
 	int nroot = 10;
 	//guess iniziali intervallo in cui cercare gli intervalli che contengono radici
-	long double a = 0.0;
-	long double b = 8.0;
 	long double xb1[nroot];
 	long double xb2[nroot];
-	long double G = 1.0;
-	int N = 50;
-	long double h = (long double)(8-G) / (long double)N;
+	iniV(xb1,nroot);
+	iniV(xb2,nroot);
+	long double G = 0.6;
+	long double a = 0.001;
+	long double b = 1000;
+	int N = 100;
+	long double h = (long double)(6-G) / (long double)N;
 	
+	/*
 	for (int i = 0; i < N; ++i)
 	{
 		
@@ -321,14 +340,15 @@ int main(int argc, char const *argv[])
 	G+=h;
 
 	}
+	*/
 	
 	
-	
+	// THIS WORKS FOR G IN (0.6,6) for sure
 	long double pos1,pos2;
 	for (int j = 0; j < N; ++j)
 	{
 
-		bracketing(Kigx,a,b,100,xb1,xb2,G);
+		bracketing(Kigx,a,b,100000,xb1,xb2,G);
 		pos1 = max(xb1,nroot);
 		pos2 = max(xb2,nroot);
 		printf("MAX xb1 = %.30LF\n", pos1);
@@ -343,7 +363,7 @@ int main(int argc, char const *argv[])
 		freeV(xb2, nroot);
 
 	}
-	*/
+	
 
 	fclose(file);
 	fclose(file2);
