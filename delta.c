@@ -109,8 +109,8 @@ int main(int argc, char const *argv[])
 	FILE* file = fopen("deltaDati.txt","w");
 	long double g = 0.5;
 	long double a,b;
-	a = powl(10.0,-70);
-	b = powl(10.0,-1); //powl(10.0, 1);
+	a = 0.001;
+	b = 0.4; //powl(10.0, 1);
 	int N = 50000;
 	long double h = (b-a) / (long double)N;
 	printf("%.30Lf\n",h);

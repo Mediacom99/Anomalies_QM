@@ -57,16 +57,19 @@ axs.set_xlabel(r'$k\epsilon$', fontsize=20, loc='right')
 axs.set_ylabel(r'$\delta(k\epsilon)$', fontsize=20, loc='top', rotation='horizontal')
 axs.set(xlim=(np.amin(x),np.amax(x)), ylim=(np.amin(y),np.amax(y)*1.2))
 #axs.set(xlim =(np.amin(x),np.amax(x)),ylim=(0.0, 0.8))
-axs.set_xscale('log')
+#axs.set_xscale('log')
 #axs.set(xlim=(0,3),ylim=(-17,0))
 
 #Ticks
 #plt.yticks(list(plt.yticks()[0]) + [np.pi/4])
-plt.yticks([np.pi/4.0],[r'$\frac{\pi}{4}$'])
+#plt.yticks([np.pi/4.0],[r'$\frac{\pi}{4}$'])
+
+
+
 #Axis and spines
 #axs.xaxis.tick_top()
 #axs.xaxis.set_label_position('top') 
-#axs.spines['bottom'].set_position('zero') #posizione asse x dove x = 0, anche se i dati su y non sono simmetrici
+axs.spines['bottom'].set_position('zero') #posizione asse x dove x = 0, anche se i dati su y non sono simmetrici
 axs.spines['right'].set_visible(False)
 axs.spines['top'].set_visible(False)
 #axs.spines['bottom'].set_visible(False)
@@ -77,7 +80,7 @@ axs.spines['top'].set_visible(False)
 #Text
 #plt.text(0.25,0.2,r'$\epsilon$', fontsize=15)
 #approx = r'$k_{1}\epsilon = 2e^{\frac{[\arg\Gamma(1+ig) - \pi]}{g}}$'
-axs.legend([r'$\text{g = }0$'],prop={'size': 10},loc='lower center')
+axs.legend([r'$\text{g = }0$'],prop={'size': 10},loc='upper center')
 
 
 
