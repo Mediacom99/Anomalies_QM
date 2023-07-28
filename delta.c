@@ -100,6 +100,19 @@ long double delta0(long double x)
 	return atanl((a + PI/2.0) / (a - PI/2.0));
 }
 
+//Plot fig7 eq 47
+long double deltaRn(long double x)
+{
+	return atanl((logl(x) + PI/2.0)/(logl(x)-PI/2.0));
+}
+
+//Plot fig8 eq 42
+long double eps(long double g)
+{	
+	long double k1 = 0.1;
+	return 2.0 / (gamma*k1) * expl(-PI*g);
+}
+
 
 
 
@@ -109,9 +122,9 @@ int main(int argc, char const *argv[])
 	FILE* file = fopen("deltaDati.txt","w");
 	long double g = 0.5;
 	long double a,b;
-	a = 0.001;
-	b = 0.4; //powl(10.0, 1);
-	int N = 50000;
+	a = 0.01;
+	b = 4.0; //powl(10.0, 1);
+	int N = 100000;
 	long double h = (b-a) / (long double)N;
 	printf("%.30Lf\n",h);
 	long double x = a;
@@ -131,7 +144,7 @@ int main(int argc, char const *argv[])
 	while(x < b)
 	{
 		//fprintf(file, "%.70Lf,%.70Lf\n",x,delta(x,g));
-		fprintf(file, "%.70Lf,%.70Lf\n",x,delta0(x));
+		fprintf(file, "%.70Lf,%.70Lf\n",x,deltaRn(x));
 		x*=1.01;
 	}
 		
