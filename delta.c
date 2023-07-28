@@ -110,7 +110,7 @@ long double deltaRn(long double x)
 long double eps(long double g)
 {	
 	long double k1 = 0.1;
-	return 2.0 / (gamma*k1) * expl(-PI*g);
+	return (2.0 / (gamma*k1)) * expl(-PI/g);
 }
 
 
@@ -122,8 +122,8 @@ int main(int argc, char const *argv[])
 	FILE* file = fopen("deltaDati.txt","w");
 	long double g = 0.5;
 	long double a,b;
-	a = 0.01;
-	b = 4.0; //powl(10.0, 1);
+	a = powl(10.0,-70.0);
+	b = 1.5; //powl(10.0, 1);
 	int N = 100000;
 	long double h = (b-a) / (long double)N;
 	printf("%.30Lf\n",h);
@@ -144,7 +144,7 @@ int main(int argc, char const *argv[])
 	while(x < b)
 	{
 		//fprintf(file, "%.70Lf,%.70Lf\n",x,delta(x,g));
-		fprintf(file, "%.70Lf,%.70Lf\n",x,deltaRn(x));
+		fprintf(file, "%.70Lf,%.70Lf\n",x,eps(x));
 		x*=1.01;
 	}
 		
